@@ -77,7 +77,7 @@
         /* --- INTRO SCREEN --- */
         #intro-container { width: 100%; display: none; justify-content: center; z-index: 10; position: absolute; }
         .intro-card {
-            background: var(--champagne); padding: 50px 30px; border-radius: 30px;
+            background: var(--champagne); padding: 40px 25px; border-radius: 30px;
             text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.5);
             opacity: 0; transition: 0.8s; max-width: 500px; width: 90%;
         }
@@ -85,7 +85,7 @@
         /* --- CARD & BUTTONS --- */
         #main-container { width: 100%; display: none; justify-content: center; z-index: 10; position: absolute; }
         .card { 
-            background: var(--champagne); padding: 50px 30px; border-radius: 30px; 
+            background: var(--champagne); padding: 40px 25px; border-radius: 30px; 
             text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.5);
             opacity: 0; transition: 0.8s; max-width: 480px; width: 90%;
         }
@@ -113,9 +113,9 @@
         }
         
         .falling-heart {
-            position: absolute; top: -50px;
+            position: absolute; top: -60px;
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            opacity: 0.9; will-change: transform, top;
+            opacity: 0.95; will-change: transform, top;
         }
 
         .reasons-btn {
@@ -124,19 +124,19 @@
             background-size: 200% auto;
             color: var(--forest-deep); padding: 14px 28px; border-radius: 12px;
             border: none; font-size: 1rem; text-decoration: none; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            display: none; align-items: center; gap: 8px; z-index: 3000; cursor: pointer;
+            display: none; align-items: center; gap: 8px; z-index: 3500; cursor: pointer;
             animation: slideUp 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards, shimmer 3s linear infinite;
         }
 
         /* --- HEART POPUP MODAL --- */
         #reason-modal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(26, 36, 27, 0.7); backdrop-filter: blur(5px);
-            display: none; justify-content: center; align-items: center; z-index: 4000; opacity: 0; transition: opacity 0.4s ease;
+            background: rgba(26, 36, 27, 0.75); backdrop-filter: blur(6px);
+            display: none; justify-content: center; align-items: center; z-index: 5000; opacity: 0; transition: opacity 0.4s ease;
         }
         .reason-card-popup {
             background: var(--champagne); padding: 40px 30px; border-radius: 24px;
-            max-width: 400px; width: 85%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-width: 420px; width: 85%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.6);
             transform: scale(0.5); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -149,7 +149,6 @@
 <body>
 
     <canvas id="cursor-canvas"></canvas>
-    <!-- Updated song source to Tum Jab Paas -->
     <audio id="main-song" loop><source src="tum-jab-paas.mp3" type="audio/mpeg"></audio>
 
     <div id="envelope-wrapper">
@@ -166,7 +165,7 @@
     <!-- Intro Screen -->
     <div id="intro-container">
         <div class="intro-card" id="intro-card">
-            <h2 style="font-family:'Playfair Display', serif; color:var(--forest-deep); font-size:1.6rem; line-height: 1.5; margin: 0 0 30px 0;">
+            <h2 style="font-family:'Playfair Display', serif; color:var(--forest-deep); font-size:1.5rem; line-height: 1.5; margin: 0 0 30px 0;">
                 “I know we can't meet this year but… I still wanted to make something for you in a way that feels special. And since we have stayed so long (5 years and 2 months to be exact), I wanted to make it permanent today”
             </h2>
             <button id="intro-next-btn" class="main-action" style="width: 200px;">Continue 🤍</button>
@@ -176,7 +175,7 @@
     <!-- Question Screen -->
     <div id="main-container">
         <div class="card" id="main-card">
-            <h1 id="question-text" style="font-family:'Playfair Display', serif; color:var(--forest-deep); font-size:2rem; margin:0 0 30px 0; line-height: 1.4;">
+            <h1 id="question-text" style="font-family:'Playfair Display', serif; color:var(--forest-deep); font-size:1.8rem; margin:0 0 30px 0; line-height: 1.4;">
                 So with this card, I ask you to be my soulmate, through thick and thin, day and night, today, tomorrow and for every day till eternity
             </h1>
             <div style="display:flex; flex-direction:column; align-items:center;">
@@ -203,7 +202,7 @@
 
     <div id="reason-modal" onclick="closeReasonModal(event)">
         <div class="reason-card-popup" id="reason-popup-content">
-            <p id="reason-text" style="font-family:'Playfair Display', serif; font-size: 1.3rem; color: var(--forest-deep); margin: 0; line-height: 1.5;"></p>
+            <p id="reason-text" style="font-family:'Playfair Display', serif; font-size: 1.25rem; color: var(--forest-deep); margin: 0; line-height: 1.5;"></p>
         </div>
     </div>
 
@@ -279,6 +278,7 @@
             const env = document.querySelector('.envelope');
             if(env.classList.contains('open')) return;
             env.classList.add('open');
+            song.load();
             song.play().catch(() => {});
 
             setTimeout(() => {
@@ -369,6 +369,7 @@
 
             const pileContainer = document.getElementById('pile-container');
             pileContainer.style.display = 'block';
+            pileContainer.style.pointerEvents = 'auto'; // Enable pointer events so hearts can be clicked
 
             const totalHearts = 50;
             const screenWidth = window.innerWidth;
@@ -381,21 +382,21 @@
                 const heart = document.createElement('div');
                 heart.classList.add('falling-heart');
 
-                const size = isRed ? (Math.random() * 10 + 32) : (Math.random() * 14 + 18);
+                const size = isRed ? (Math.random() * 8 + 34) : (Math.random() * 12 + 20);
                 heart.style.width = `${size}px`;
                 heart.style.height = `${size}px`;
 
                 const svgColor = isRed ? '%23d9534f' : '%23a7bc95';
                 heart.style.backgroundImage = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='${svgColor}'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/></svg>")`;
 
-                const startX = Math.random() * (screenWidth - 50);
+                const startX = Math.random() * (screenWidth - 60);
                 heart.style.left = `${startX}px`;
 
                 if (isRed) {
                     const reasonText = specialReasons[redIndex++];
-                    heart.dataset.reason = reasonText;
                     heart.style.cursor = 'pointer';
-                    heart.style.zIndex = '2800';
+                    heart.style.zIndex = '3000';
+                    heart.title = "Click to read reason";
                     heart.addEventListener('click', (e) => {
                         e.stopPropagation();
                         openReasonModal(reasonText);
@@ -404,10 +405,11 @@
 
                 pileContainer.appendChild(heart);
 
-                const landingY = screenHeight - (Math.random() * 90 + 20);
-                const duration = Math.random() * 2000 + 2500;
-                const delay = Math.random() * 3000;
-                const finalRotation = Math.random() * 60 - 30;
+                // Landing bounds near the bottom of screen
+                const landingY = screenHeight - (Math.random() * 80 + 25);
+                const duration = Math.random() * 1800 + 2200;
+                const delay = Math.random() * 2500;
+                const finalRotation = Math.random() * 50 - 25;
 
                 setTimeout(() => {
                     heart.style.transition = `top ${duration}ms cubic-bezier(0.25, 1, 0.5, 1), transform ${duration}ms ease`;
